@@ -1,4 +1,4 @@
-import { hex2Text } from "./hex2text";
+import { hex2Text } from "./hex2text.js";
 import { Core } from "@walletconnect/core";
 import { Web3Wallet } from "@walletconnect/web3wallet";
 import WalletConnect from "@walletconnect/client";
@@ -7,7 +7,7 @@ import { getData } from "./storageData.js";
 import lightwallet from "eth-lightwallet";
 import { getKS } from "./getKS.js";
 //@ts-ignore
-import { txutils, signing } from "eth-lightwallet";
+const { txutils, signing } = lightwallet;
 
 const core = new Core({
   projectId: "ec307039abe79975829b7c4b9a3c6f1a",

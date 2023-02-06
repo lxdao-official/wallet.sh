@@ -89,7 +89,13 @@ const root = () => __awaiter(void 0, void 0, void 0, function* () {
         yield connectWallet();
     }
     else if (root_cmd == rootCommands.connect_to_WalletConnect_v1) {
-        yield connectWalletV1();
+        try {
+            yield connectWalletV1();
+        }
+        catch (e) {
+            console.log("ConnectWallet V1 error: ", e.message);
+            yield root();
+        }
     }
     else if (root_cmd == rootCommands.show_active_chain) {
         const chain_id = yield chooseChain();
@@ -123,10 +129,6 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
     if (!active_chain) {
         setData("chain_id", 1);
     }
-    // ask questions
-    // create the file
-    // show success message
-    // ask questions
     yield root();
 });
 run();
