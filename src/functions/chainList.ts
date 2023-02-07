@@ -23,6 +23,13 @@ export const chainList: Record<
       browserURL: "https://goerli.etherscan.io",
     },
   },
+  localhost: {
+    chainId: 1337,
+    urls: {
+      apiURL: "https://api-localhost.etherscan.io/api",
+      browserURL: "https://localhost.etherscan.io",
+    },
+  },
   ropsten: {
     chainId: 3,
     urls: {

@@ -23,6 +23,7 @@
     "colors": "^1.4.0",
     "eth-lightwallet": "^4.0.0",
     "ethers": "^6.0.0",
+    "eventemitter3": "^5.0.0",
     "figlet": "^1.5.2",
     "inquirer": "^9.1.4",
     "lokijs": "^1.5.12",

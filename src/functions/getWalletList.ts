@@ -10,7 +10,7 @@ export async function getAddressList(): Promise<string[]> {
   const address_count = getData("address_count");
   // generate five new address/private key pairs
   // the corresponding private keys are also encrypted
-  ks.generateNewAddress(pwDerivedKey, address_count);
+  // ks.generateNewAddress(pwDerivedKey, address_count);
   var addrs = ks.getAddresses();
   return addrs;
 }

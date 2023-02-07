@@ -3,48 +3,22 @@ import { hex2Text } from "./hex2text.js";
 import { Core } from "@walletconnect/core";
 import WalletConnect from "@walletconnect/client";
 import inquirer from "inquirer";
-import { getData } from "./storageData.js";
+import { getData, setData } from "./storageData.js";
 import lightwallet from "eth-lightwallet";
 import { getKS } from "./getKS.js";
+import EventEmitter from "eventemitter3";
 //@ts-ignore
 const { txutils, signing } = lightwallet;
 const core = new Core({
     projectId: "ec307039abe79975829b7c4b9a3c6f1a",
 });
-const waitingOrReturn = () => __awaiter(void 0, void 0, void 0, function* () {
-    const questions = [
-        {
-            type: "confirm",
-            name: "waiting",
-            message: "waiting for response, continue?",
-        },
-    ];
-    const asw = yield inquirer.prompt(questions);
-    if (asw.waiting) {
-        yield waitingOrReturn();
-    }
-    else {
-        throw new Error("user cancel");
-    }
-});
-export function connectWalletV1() {
+export const cw_v1_eventBus = new EventEmitter();
+let connector;
+function _connectWallet(session_uri) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("initing...");
-        const questions = [
-            {
-                type: "input",
-                name: "session_uri",
-                message: "paste walletconnect session:",
-            },
-        ];
-        const asw = yield inquirer.prompt(questions);
-        const { session_uri } = asw;
-        console.log("connecting...");
-        yield waitingOrReturn();
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             //@ts-ignore
-            const connector = new WalletConnect.default({
-                // Required
+            connector = new WalletConnect.default({
                 uri: session_uri,
                 // Required
                 clientMeta: {
@@ -54,11 +28,23 @@ export function connectWalletV1() {
                     icons: [],
                 },
             });
+            // connector.uri = session_uri;
+            // connector.connect({
+            //   chainId: getData("chain_id"),
+            // });
+            connector.on("session_update", (error, payload) => __awaiter(this, void 0, void 0, function* () {
+                if (error) {
+                    reject(error);
+                }
+                console.log("session_update", payload);
+                cw_v1_eventBus.emit("session_update", payload);
+            }));
             // Subscribe to session requests
             connector.on("session_request", (error, payload) => __awaiter(this, void 0, void 0, function* () {
                 if (error) {
-                    throw error;
+                    reject(error);
                 }
+                console.log("session_request", payload);
                 const questions = [
                     {
                         type: "list",
@@ -75,6 +61,15 @@ export function connectWalletV1() {
                         chainId: getData("chain_id"), // required
                     });
                     console.log("approved");
+                    // save session
+                    setData("active_wc_v1", {
+                        uri: session_uri,
+                        dapp: payload.params[0].peerMeta.name,
+                    });
+                    cw_v1_eventBus.emit("session_approved", {
+                        uri: session_uri,
+                        dapp: payload.params[0].peerMeta.name,
+                    });
                 }
                 else if (asw.session_proposal == "Reject") {
                     connector.rejectSession({
@@ -88,7 +83,7 @@ export function connectWalletV1() {
             // Subscribe to call requests
             connector.on("call_request", (error, payload) => __awaiter(this, void 0, void 0, function* () {
                 if (error) {
-                    throw error;
+                    reject(error);
                 }
                 console.log("call_request", payload);
                 let sign_text = "";
@@ -147,9 +142,15 @@ export function connectWalletV1() {
                     reject("back to home");
                 }
             }));
+            connector.on("session_update", (error, payload) => {
+                if (error) {
+                    reject(error);
+                }
+                console.log("session_update", payload);
+            });
             connector.on("disconnect", (error, payload) => {
                 if (error) {
-                    throw error;
+                    reject(error);
                 }
                 console.log("disconnect", payload);
                 reject("disconnected, back to home");
@@ -158,3 +159,55 @@ export function connectWalletV1() {
         }));
     });
 }
+export function walletConnectV1Root() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const questions = [
+            {
+                type: "list",
+                name: "wc_v1_root",
+                message: "walletconnect v1",
+                choices: ["connect new dapp", "reconnect wallet", "back to home"],
+            },
+        ];
+        const asw = yield inquirer.prompt(questions);
+        if (asw.wc_v1_root == "connect new wallet") {
+            yield connectNewWallet();
+        }
+        else if (asw.wc_v1_root == "reconnect wallet") {
+            yield reconnectWallet();
+        }
+        else {
+            return;
+        }
+        yield walletConnectV1Root();
+    });
+}
+export function connectNewWallet() {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log("initing...");
+        const questions = [
+            {
+                type: "input",
+                name: "session_uri",
+                message: "paste walletconnect session:",
+            },
+        ];
+        const asw = yield inquirer.prompt(questions);
+        const { session_uri } = asw;
+        console.log("connecting...");
+        yield _connectWallet(session_uri);
+        // await waitingOrReturn();
+    });
+}
+export const reconnectWallet = () => __awaiter(void 0, void 0, void 0, function* () {
+    const session_uri = getData("active_wc_v1");
+    if (session_uri) {
+        yield _connectWallet(session_uri);
+    }
+});
+export const getEnterCommand = () => __awaiter(void 0, void 0, void 0, function* () {
+    return {
+        value: "connect_to_WalletConnect_v1",
+        name: "connect to WalletConnect(v1)",
+    };
+});

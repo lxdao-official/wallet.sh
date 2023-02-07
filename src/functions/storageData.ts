@@ -1,5 +1,5 @@
 import fs from "fs";
-type DataKey = "address_count" | "address_active" | "chain_id";
+type DataKey = "address_count" | "address_active" | "chain_id" | "active_wc_v1";
 const data: Record<any, any> = {
   // address_count: 1,
 };

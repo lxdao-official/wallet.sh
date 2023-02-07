@@ -74,4 +74,4 @@ npm run start
 # TODO
 
 - [ ] connect to multi client at the same time, and watch them all.
-- [ ] can operate by other script.
+- [ ] provide api to other program for automatical wallet operation.

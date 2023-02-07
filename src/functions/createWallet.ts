@@ -10,7 +10,9 @@ export async function createNewWallet(): Promise<string> {
   const address_count = getData("address_count");
   // generate five new address/private key pairs
   // the corresponding private keys are also encrypted
-  ks.generateNewAddress(pwDerivedKey, address_count + 1);
+  ks.generateNewAddress(pwDerivedKey, 1);
   var addrs = ks.getAddresses();
+
+  setData("address_count", address_count + 1);
   return addrs[address_count];
 }

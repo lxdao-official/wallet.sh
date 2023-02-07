@@ -18,7 +18,7 @@ export async function getKS(): Promise<{
     if (globalKS) {
       return globalKS.keyFromPassword(password, function (err, pwDerivedKey) {
         if (err) return reject(err);
-        globalKS.generateNewAddress(pwDerivedKey, address_count);
+        // globalKS.generateNewAddress(pwDerivedKey, address_count);
         resolve({
           ks: globalKS,
           pwDerivedKey,
