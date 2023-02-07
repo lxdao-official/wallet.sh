@@ -1,5 +1,5 @@
 import { BaseController } from "./BaseController.js";
-export class ConnectController extends BaseController {
+export class SystemController extends BaseController {
   async questions() {
     return [
       {
@@ -8,8 +8,12 @@ export class ConnectController extends BaseController {
         message: "What do you want to do?",
         choices: [
           {
-            name: "connect wallet (v1)",
-            value: "active_chain",
+            name: "import private key",
+            value: "import_private_key",
+          },
+          {
+            name: "export private key",
+            value: "export_private_key",
           },
 
           {

@@ -1,7 +1,6 @@
-import inquirer from "inquirer";
 import lightwallet from "eth-lightwallet";
 import { getRootMnemonic } from "./getRootMnemonic.js";
-import { getData, setData } from "./storageData.js";
+import { getData } from "./storageData.js";
 import { getPassword } from "./getPassword.js";
 
 let globalKS: lightwallet.keystore;

@@ -14,11 +14,13 @@ const rootCommands = {
 };
 
 import "colors";
+import { SystemController } from "./SystemController.js";
 
 class RootController extends BaseController implements IBaseController {
   walletController = new WalletController();
   chainController = new ChainController();
   connectController = new ConnectController();
+  systemController = new SystemController();
   async questions() {
     return [
       {
@@ -41,6 +43,10 @@ class RootController extends BaseController implements IBaseController {
             value: "dapps_manage",
           },
           {
+            name: "system manage",
+            value: "system_manage",
+          },
+          {
             name: "about us",
             value: "about_us",
           },
@@ -58,6 +64,9 @@ class RootController extends BaseController implements IBaseController {
       this.enter();
     });
     this.connectController.on("exited", () => {
+      this.enter();
+    });
+    this.systemController.on("exited", () => {
       this.enter();
     });
   }
@@ -86,6 +95,9 @@ class RootController extends BaseController implements IBaseController {
         break;
       case "dapps_manage":
         this.connectController.enter();
+        break;
+      case "system_manage":
+        this.systemController.enter();
         break;
       case "about_us":
         console.log(

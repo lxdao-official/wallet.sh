@@ -1,4 +1,3 @@
-import inquirer from "inquirer";
 import { getNameOfChainId } from "../functions/chainList.js";
 import { chooseChain } from "../functions/chooseChain.js";
 import { getData, setData } from "../functions/storageData.js";

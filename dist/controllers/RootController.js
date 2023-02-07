@@ -90,6 +90,7 @@ ${"LXDAO".rainbow.bold} is an ${"R&D".blue.bold}-focused DAO in Web3.
 Our misson: Bringing together buidlers to buidl and maintain "${"LX".blue.bold}" (Valuable) projects for Web3, in a sustainable manner
 
 ============================================`);
+                    yield this.enter();
                     break;
                 default:
                     break;

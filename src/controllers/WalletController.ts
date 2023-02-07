@@ -1,4 +1,3 @@
-import inquirer from "inquirer";
 import { chooseWallet } from "../functions/chooseWallet.js";
 import { createNewWallet } from "../functions/createWallet.js";
 import { getAddressList } from "../functions/getWalletList.js";

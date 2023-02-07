@@ -1,21 +1,10 @@
 #!/usr/bin/env node
 
-import inquirer from "inquirer";
 import chalk from "chalk";
 import figlet from "figlet";
-import shell from "shelljs";
 import { createNewWallet } from "./functions/createWallet.js";
 import { askPassword, askSetPassword } from "./functions/getPassword.js";
 import { getData, setData } from "./functions/storageData.js";
-import { chooseWallet } from "./functions/chooseWallet.js";
-import { getMemoryData } from "./functions/memoryData.js";
-import { connectWallet } from "./functions/connectWallet.js";
-import {
-  connectNewWallet,
-  reconnectWallet,
-} from "./functions/connectWalletV1.js";
-import { getNameOfChainId } from "./functions/chainList.js";
-import { chooseChain } from "./functions/chooseChain.js";
 import { RootController } from "./controllers/RootController.js";
 
 const init = async () => {
