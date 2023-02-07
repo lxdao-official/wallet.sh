@@ -1,6 +1,6 @@
 import { EventEmitter } from "eventemitter3";
 import inquirer, { QuestionCollection } from "inquirer";
-import { IBaseController } from "./IBaseController";
+import { IBaseController } from "./interface/IBaseController";
 abstract class BaseController
   extends EventEmitter<"entered" | "exited">
   implements IBaseController

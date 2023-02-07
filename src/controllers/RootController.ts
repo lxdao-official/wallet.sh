@@ -1,5 +1,5 @@
 import { WalletController } from "./WalletController.js";
-import { IBaseController } from "./IBaseController.js";
+import { IBaseController } from "./interface/IBaseController.js";
 import { ChainController } from "./ChainController.js";
 import inquirer from "inquirer";
 import { BaseController } from "./BaseController.js";
